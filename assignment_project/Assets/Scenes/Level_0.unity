@@ -332,6 +332,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerRedPrefab: {fileID: -6236242554319738786, guid: c796f38dc9ecff34aa9502ac4d1f501e, type: 3}
   playerBluePrefab: {fileID: 9095215274480289263, guid: d23061c5f01e25649a6002fc8b113289, type: 3}
+  tilePrefab: {fileID: 3843217591949479123, guid: 283786dabb1eef049b3f434c9c54b451, type: 3}
 --- !u!4 &1287285247
 Transform:
   m_ObjectHideFlags: 0
