@@ -2,13 +2,13 @@
 #
 # Get latest from https://github.com/github/gitignore/blob/main/Unity.gitignore
 #
-/Assignment_Game/[Ll]ibrary/
-/Assignment_Game/[Tt]emp/
-/Assignment_Game/[Oo]bj/
-/Assignment_Game/[Bb]uild/
-/Assignment_Game/[Bb]uilds/
-/Assignment_Game/[Ll]ogs/
-/Assignment_Game/[Uu]ser[Ss]ettings/
+/assignment_project/[Ll]ibrary/
+/assignment_project/[Tt]emp/
+/assignment_project/[Oo]bj/
+/assignment_project/[Bb]uild/
+/assignment_project/[Bb]uilds/
+/assignment_project/[Ll]ogs/
+/assignment_project/[Uu]ser[Ss]ettings/
 
 # MemoryCaptures can get excessive in size.
 # They also could contain extremely sensitive data
@@ -73,3 +73,5 @@ crashlytics-build.properties
 # Temporary auto-generated Android Assets
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
 /[Aa]ssets/[Ss]treamingAssets/aa/*
+
+*.dwlt
