@@ -41,7 +41,6 @@ namespace TileGame.MainGame
             // instantiate tiles
             tileListController = new TileListController(totalTiles, tilePrefab, distanceBetweenTiles);
 
-
             // instantiate player objs
 
             // red is on left start
