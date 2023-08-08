@@ -7,7 +7,7 @@ namespace TileGame
         Blue
     }
 
-    public enum PlayerMovement
+    public enum PlayerMoveDirection
     {
         None = 0,
         MoveRight = 1,

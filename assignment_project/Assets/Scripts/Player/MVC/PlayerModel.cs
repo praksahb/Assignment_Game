@@ -5,8 +5,8 @@ namespace TileGame.Player
         public PlayerType PlayerType { get; }
 
 
-        private PlayerMovement moveDirection;
-        public PlayerMovement MoveDirection
+        private PlayerMoveDirection moveDirection;
+        public PlayerMoveDirection MoveDirection
         {
             get { return moveDirection; }
             set
@@ -39,7 +39,7 @@ namespace TileGame.Player
         public PlayerModel(PlayerType playerType, int position)
         {
             PlayerType = playerType;
-            MoveDirection = PlayerType == PlayerType.Red ? PlayerMovement.MoveRight : PlayerMovement.MoveLeft;
+            MoveDirection = PlayerType == PlayerType.Red ? PlayerMoveDirection.MoveRight : PlayerMoveDirection.MoveLeft;
 
             TilePosition = position;
             IsImprisoned = false;
