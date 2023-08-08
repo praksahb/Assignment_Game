@@ -1,4 +1,4 @@
-namespace TileGame
+namespace TileGame.Player
 {
     public class PlayerModel
     {

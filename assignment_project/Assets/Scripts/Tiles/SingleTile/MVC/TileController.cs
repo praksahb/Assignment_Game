@@ -7,10 +7,10 @@ namespace TileGame.Tiles
         public TileModel TileModel { get; }
         public TileView TileView { get; }
 
-        public TileController(TileModel tileModel, TileView tileView)
+        public TileController(TileModel tileModel, TileView tileView, Vector3 tilePosition)
         {
             TileModel = tileModel;
-            TileView = Object.Instantiate(tileView, new Vector3(TileModel.TileNumber * 1.25f, 0, 0), Quaternion.identity);
+            TileView = Object.Instantiate(tileView, tilePosition, Quaternion.identity);
 
             TileView.TileController = this;
         }

@@ -1,12 +1,12 @@
-using TileGame.Player;
 using UnityEngine;
 
-namespace TileGame
+namespace TileGame.Player
 {
     public class PlayerView : MonoBehaviour
     {
 
         public PlayerController PlayerController { get; set; }
+
 
 
     }
