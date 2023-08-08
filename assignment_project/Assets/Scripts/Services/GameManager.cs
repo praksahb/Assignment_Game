@@ -25,7 +25,7 @@ namespace TileGame.MainGame
         private PlayerController playerRed;
         private PlayerController playerBlue;
         private TileListController tileListController;
-
+        private PlayerController currentPlayerTurn;
 
         // pvt variables to be reused
         private Vector3 currentTilePosition;
@@ -33,6 +33,10 @@ namespace TileGame.MainGame
         private int playerBluePosition;
         private int turnIndex = 0;
         private PlayerController[] playersList;
+
+        //Actions 
+        public System.Action<int> RolledDice;
+
 
         private void Awake()
         {
@@ -65,6 +69,46 @@ namespace TileGame.MainGame
 
             // reset turnindex
             turnIndex = 0;
+        }
+
+        public void PlayTurn()
+        {
+            // get random dice roll value
+            int diceValue = Random.Range(1, 7);
+            // Invoke Action - received by UIManager
+            RolledDice?.Invoke(diceValue);
+
+            // get current player
+            currentPlayerTurn = playersList[turnIndex % numOfPlayers];
+
+            // MOVE function
+            // change tilePos value in PM
+            int currentTilePos = currentPlayerTurn.PlayerModel.TilePosition;
+            int moveDirection = (int)currentPlayerTurn.PlayerModel.MoveDirection;
+            int newTilePos = currentTilePos + (moveDirection * diceValue);
+            if (newTilePos > totalTiles - 1)
+            {
+                moveDirection *= -1;
+                currentPlayerTurn.PlayerModel.MoveDirection = (PlayerMoveDirection)moveDirection;
+                int offset = newTilePos - (totalTiles - 1);
+                newTilePos = totalTiles - 1 - offset;
+            }
+            if (newTilePos < 0)
+            {
+                moveDirection *= -1;
+                currentPlayerTurn.PlayerModel.MoveDirection = (PlayerMoveDirection)moveDirection;
+                int offset = newTilePos;
+                newTilePos = 0 + offset * -1;
+            }
+
+            currentPlayerTurn.PlayerModel.TilePosition = newTilePos;
+            // get value of tile from tile list
+            currentTilePosition.x = tileListController.GetTilePositionX(currentPlayerTurn.PlayerModel.TilePosition);
+            // move transform value
+            currentPlayerTurn.MoveCurrentPosition(currentTilePosition.x);
+
+            turnIndex++;
+
         }
     }
 }
