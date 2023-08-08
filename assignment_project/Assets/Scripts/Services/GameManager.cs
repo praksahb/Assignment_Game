@@ -13,6 +13,8 @@ namespace TileGame.MainGame
         [SerializeField]
         private PlayerView playerBluePrefab;
         [SerializeField]
+        private int numOfPlayers;
+        [SerializeField]
         private TileView tilePrefab;
         [SerializeField]
         private float distanceBetweenTiles = 1.1f;
@@ -29,10 +31,13 @@ namespace TileGame.MainGame
         private Vector3 currentTilePosition;
         private int playerRedPosition = 0;
         private int playerBluePosition;
+        private int turnIndex = 0;
+        private PlayerController[] playersList;
 
         private void Awake()
         {
             playerBluePosition = totalTiles - 1;
+            playersList = new PlayerController[numOfPlayers];
             InitializeGame();
         }
 
@@ -42,16 +47,24 @@ namespace TileGame.MainGame
             tileListController = new TileListController(totalTiles, tilePrefab, distanceBetweenTiles);
 
             // instantiate player objs
+            InitializePlayers();
+        }
 
+        private void InitializePlayers()
+        {
             // red is on left start
             PlayerModel playerRedModel = new PlayerModel(PlayerType.Red, playerRedPosition);
             currentTilePosition.x = tileListController.GetTilePositionX(playerRedModel.TilePosition);
             playerRed = new PlayerController(playerRedModel, playerRedPrefab, currentTilePosition.x);
-
+            playersList[turnIndex++] = playerRed;
             // blue is on right end
             PlayerModel playerBlueModel = new PlayerModel(PlayerType.Blue, playerBluePosition);
             currentTilePosition.x = tileListController.GetTilePositionX(playerBlueModel.TilePosition);
             playerBlue = new PlayerController(playerBlueModel, playerBluePrefab, currentTilePosition.x);
+            playersList[turnIndex++] = playerBlue;
+
+            // reset turnindex
+            turnIndex = 0;
         }
     }
 }
