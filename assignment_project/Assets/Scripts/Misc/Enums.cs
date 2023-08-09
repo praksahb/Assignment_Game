@@ -13,4 +13,10 @@ namespace TileGame
         MoveRight = 1,
         MoveLeft = -1,
     }
+
+    public enum PowerCardType
+    {
+        MoveBackward,
+        Imprison
+    }
 }

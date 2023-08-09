@@ -26,5 +26,36 @@ namespace TileGame.Player
             position.x = xPos;
             PlayerView.transform.position = position;
         }
+
+        public int MovePlayer(int tileEndIndex)
+        {
+            int moveDir = (int)PlayerModel.MoveDirection;
+            PlayerModel.TilePosition += moveDir;
+            if (PlayerModel.TilePosition == 0 || PlayerModel.TilePosition == tileEndIndex)
+            {
+                moveDir *= -1;
+                PlayerModel.MoveDirection = (PlayerMoveDirection)moveDir;
+            }
+            return PlayerModel.TilePosition;
+        }
+
+        public void ApplyPowerCard(PowerCardType cardType, int powerCardInt)
+        {
+            switch (cardType)
+            {
+                case PowerCardType.MoveBackward:
+                    {
+                        // move backwards 
+                        break;
+                    }
+                case PowerCardType.Imprison:
+                    {
+                        // imprison the player for two turns
+                        break;
+                    }
+            }
+
+
+        }
     }
 }
