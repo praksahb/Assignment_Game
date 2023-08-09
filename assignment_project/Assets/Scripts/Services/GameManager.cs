@@ -21,6 +21,9 @@ namespace TileGame.MainGame
         [SerializeField]
         private int totalTiles = 10;
 
+        //
+        [SerializeField] private UIManager uiManager;
+
         // game obj private references
         private PlayerController playerRed;
         private PlayerController playerBlue;
@@ -36,9 +39,20 @@ namespace TileGame.MainGame
 
         //Actions 
         public System.Action<int> RolledDice;
+        public System.Action<string> TurnChangePlayerName;
 
 
-        private void Awake()
+        private void OnEnable()
+        {
+            uiManager.OnTurnChange += SendNameString;
+        }
+
+        private void OnDisable()
+        {
+            uiManager.OnTurnChange -= SendNameString;
+        }
+
+        private void Start()
         {
             playerBluePosition = totalTiles - 1;
             playersList = new PlayerController[numOfPlayers];
@@ -69,6 +83,9 @@ namespace TileGame.MainGame
 
             // reset turnindex
             turnIndex = 0;
+            currentPlayerTurn = playersList[turnIndex % numOfPlayers];
+
+            TurnChangePlayerName?.Invoke(currentPlayerTurn.PlayerModel.PlayerName);
         }
 
         public void PlayTurn()
@@ -96,7 +113,11 @@ namespace TileGame.MainGame
             }
 
             turnIndex++;
+        }
 
+        private void SendNameString()
+        {
+            TurnChangePlayerName?.Invoke(playersList[turnIndex % numOfPlayers].PlayerModel.PlayerName);
         }
     }
 }
