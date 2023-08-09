@@ -998,7 +998,7 @@ GameObject:
   - component: {fileID: 1054132355}
   - component: {fileID: 1054132354}
   m_Layer: 5
-  m_Name: PlayerTurnName
+  m_Name: PowerCardName
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1022,7 +1022,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 200, y: 50}
+  m_SizeDelta: {x: 482.4402, y: 50}
   m_Pivot: {x: 1, y: 0.5}
 --- !u!114 &1054132354
 MonoBehaviour:
@@ -1071,14 +1071,14 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 33.5
+  m_fontSize: 38.8
   m_fontSizeBase: 32
   m_fontWeight: 400
   m_enableAutoSizing: 1
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 2
+  m_HorizontalAlignment: 1
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
@@ -1157,8 +1157,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 750, y: 100}
+  m_AnchoredPosition: {x: -0.000061035, y: 0}
+  m_SizeDelta: {x: 971, y: 100}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1190535651
 MonoBehaviour:
@@ -1226,8 +1226,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -225.23}
-  m_SizeDelta: {x: 0, y: -450.46}
+  m_AnchoredPosition: {x: 0, y: -225}
+  m_SizeDelta: {x: 0, y: -450}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1272835921
 MonoBehaviour:
@@ -1306,7 +1306,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playTurn: {fileID: 1507300466}
+  backwardsButton: {fileID: 0}
+  imprisonButton: {fileID: 0}
   diceRollText: {fileID: 1859525797}
+  nameText: {fileID: 1939235721}
+  powerNameText: {fileID: 0}
   gameManager: {fileID: 1287285246}
 --- !u!1 &1272977529
 GameObject:
@@ -1409,6 +1413,7 @@ MonoBehaviour:
   tilePrefab: {fileID: 3843217591949479123, guid: 283786dabb1eef049b3f434c9c54b451, type: 3}
   distanceBetweenTiles: 1.1
   totalTiles: 10
+  uiManager: {fileID: 1272835924}
 --- !u!4 &1287285247
 Transform:
   m_ObjectHideFlags: 0
@@ -2028,7 +2033,7 @@ GameObject:
   - component: {fileID: 1939235722}
   - component: {fileID: 1939235721}
   m_Layer: 5
-  m_Name: PlayerTurnDefaultText
+  m_Name: PlayerTurnName
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2052,7 +2057,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 250.1084, y: 50}
+  m_SizeDelta: {x: 421.5499, y: 50}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &1939235721
 MonoBehaviour:
@@ -2074,7 +2079,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Current Player Turn :'
+  m_text: 'Current Turn : '
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -2108,7 +2113,7 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 2
+  m_HorizontalAlignment: 1
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
@@ -2137,7 +2142,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: -120.23779, w: 6.6061707}
+  m_margin: {x: 0, y: 0, z: -0.9085083, w: 6.6061707}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
