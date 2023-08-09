@@ -27,6 +27,29 @@ namespace TileGame.Player
             }
         }
 
+        private bool isMovingBackwards;
+        public bool IsMovingBackwards
+        {
+            get { return isMovingBackwards; }
+            set
+            {
+                isMovingBackwards = value;
+                if (isMovingBackwards == false)
+                {
+                    MoveBackwards = 1;
+                }
+            }
+        }
+        private int moveBackwards;
+        public int MoveBackwards
+        {
+            get { return moveBackwards; }
+            set
+            {
+                moveBackwards = value;
+            }
+        }
+
         private bool isImprisoned;
         public bool IsImprisoned
         {
@@ -44,6 +67,10 @@ namespace TileGame.Player
             set
             {
                 imprisonedTurns = value;
+                if (imprisonedTurns == 0)
+                {
+                    IsImprisoned = false;
+                }
             }
         }
 
@@ -57,7 +84,10 @@ namespace TileGame.Player
             MoveDirection = PlayerType == PlayerType.Red ? PlayerMoveDirection.MoveRight : PlayerMoveDirection.MoveLeft;
 
             TilePosition = position;
+
+            MoveBackwards = 1;
             IsImprisoned = false;
+            imprisonedTurns = 0;
         }
     }
 }

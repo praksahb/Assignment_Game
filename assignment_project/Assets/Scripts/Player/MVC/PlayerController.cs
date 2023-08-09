@@ -30,7 +30,17 @@ namespace TileGame.Player
         public int MovePlayer(int tileEndIndex)
         {
             int moveDir = (int)PlayerModel.MoveDirection;
-            PlayerModel.TilePosition += moveDir;
+
+            if (PlayerModel.IsMovingBackwards)
+            {
+                if (PlayerModel.TilePosition == 0 || PlayerModel.TilePosition == tileEndIndex)
+                {
+                    return PlayerModel.TilePosition;
+                }
+            }
+
+            PlayerModel.TilePosition += moveDir * PlayerModel.MoveBackwards;
+
             if (PlayerModel.TilePosition == 0 || PlayerModel.TilePosition == tileEndIndex)
             {
                 moveDir *= -1;
@@ -45,12 +55,16 @@ namespace TileGame.Player
             {
                 case PowerCardType.MoveBackward:
                     {
-                        // move backwards 
+                        // move backwards
+                        PlayerModel.IsMovingBackwards = true;
+                        PlayerModel.MoveBackwards = powerCardInt;
                         break;
                     }
                 case PowerCardType.Imprison:
                     {
                         // imprison the player for two turns
+                        PlayerModel.IsImprisoned = true;
+                        PlayerModel.ImprisonedTurns = powerCardInt;
                         break;
                     }
             }

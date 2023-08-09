@@ -9,9 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: 807e66a7bca494e4ba4c956687d219f3, type: 3}
   m_Name: Imprison Power Card
-  m_EditorClassIdentifier: Assembly-CSharp:TileGame:ImprisonPowerCard
+  m_EditorClassIdentifier: 
   cardName: Imprison
   cardType: 1
   imprisonTurns: 2
