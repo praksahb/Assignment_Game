@@ -144,14 +144,14 @@ namespace TileGame.MainGame
                 if (currentPlayerTurn.PlayerModel.IsImprisoned)
                 {
                     // invoke events for setting off buttons for play cards
-                    uiManager.SwitchBackwardsPowerCard?.Invoke(true);
-                    uiManager.SwitchImprisonPowerCard?.Invoke(true);
+                    uiManager.SwitchOffBackwardsPowerCard?.Invoke(true);
+                    uiManager.SwitchOffImprisonPowerCard?.Invoke(true);
                 }
             }
             else
             {
-                uiManager.SwitchBackwardsPowerCard?.Invoke(false);
-                uiManager.SwitchImprisonPowerCard?.Invoke(false);
+                uiManager.SwitchOffBackwardsPowerCard?.Invoke(false);
+                uiManager.SwitchOffImprisonPowerCard?.Invoke(false);
             }
         }
 
@@ -160,29 +160,41 @@ namespace TileGame.MainGame
             currentPlayerTurn = playersList[turnIndex % numOfPlayers];
             string playerName = currentPlayerTurn.PlayerModel.PlayerName;
             string powerName;
+
             if (activePowerCard[turnIndex % numOfPlayers] == null)
             {
                 powerName = "None";
-                if (currentPlayerTurn.PlayerModel.IsImprisoned == false)
-                {
-                    uiManager.UpdatePlayButtonText?.Invoke(false);
-                }
-                else
-                {
-                    uiManager.UpdatePlayButtonText?.Invoke(true);
-                    uiManager.SwitchBackwardsPowerCard?.Invoke(true);
-                    uiManager.SwitchImprisonPowerCard?.Invoke(true);
-                }
             }
             else
             {
                 powerName = activePowerCard[turnIndex % numOfPlayers].cardName;
-                if (activePowerCard[turnIndex % numOfPlayers].cardType == PowerCardType.Imprison)
-                {
-                    uiManager.UpdatePlayButtonText?.Invoke(true);
-                }
+            }
+            if (currentPlayerTurn.PlayerModel.IsImprisoned)
+            {
+                powerName = "Imprison";
             }
             TurnChangeUpdates?.Invoke(playerName, powerName);
+
+            if (activePowerCard[turnIndex % numOfPlayers] != null && activePowerCard[turnIndex % numOfPlayers].cardType == PowerCardType.Imprison)
+            {
+                uiManager.UpdatePlayButtonText?.Invoke(true);
+                uiManager.SwitchOffBackwardsPowerCard?.Invoke(true);
+                uiManager.SwitchOffImprisonPowerCard?.Invoke(true);
+            }
+
+            if (currentPlayerTurn.PlayerModel.IsImprisoned == true || playersList[(turnIndex + 1) % numOfPlayers].PlayerModel.IsImprisoned == true)
+            {
+                uiManager.UpdatePlayButtonText?.Invoke(true);
+                uiManager.SwitchOffBackwardsPowerCard?.Invoke(true);
+                uiManager.SwitchOffImprisonPowerCard?.Invoke(true);
+            }
+            else
+            {
+                uiManager.UpdatePlayButtonText?.Invoke(false);
+                uiManager.SwitchOffBackwardsPowerCard?.Invoke(false);
+                uiManager.SwitchOffImprisonPowerCard?.Invoke(false);
+            }
+
         }
 
         private void activatePowerCard(PowerCardType powerCardType)

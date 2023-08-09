@@ -22,8 +22,8 @@ namespace TileGame
         public Action OnTurnChange;
         public Action<bool> UpdatePlayButtonText;
 
-        public Action<bool> SwitchBackwardsPowerCard;
-        public Action<bool> SwitchImprisonPowerCard;
+        public Action<bool> SwitchOffBackwardsPowerCard;
+        public Action<bool> SwitchOffImprisonPowerCard;
 
         private void OnEnable()
         {
@@ -32,9 +32,9 @@ namespace TileGame
             imprisonButton.onClick.AddListener(ActivateImprisonPower);
             gameManager.RolledDice += UpdateDiceRollValue;
             gameManager.TurnChangeUpdates += UpdateTurnChangeValues;
-            UpdatePlayButtonText += changePlayButtonText;
-            SwitchBackwardsPowerCard += switchButtonBackwards;
-            SwitchImprisonPowerCard += switchImprisonButton;
+            UpdatePlayButtonText += ChangePlayButtonText;
+            SwitchOffBackwardsPowerCard += switchButtonBackwards;
+            SwitchOffImprisonPowerCard += switchImprisonButton;
         }
 
         private void Start()
@@ -50,7 +50,9 @@ namespace TileGame
             imprisonButton.onClick.RemoveAllListeners();
             gameManager.RolledDice -= UpdateDiceRollValue;
             gameManager.TurnChangeUpdates -= UpdateTurnChangeValues;
-            UpdatePlayButtonText -= changePlayButtonText;
+            UpdatePlayButtonText -= ChangePlayButtonText;
+            SwitchOffBackwardsPowerCard -= switchButtonBackwards;
+            SwitchOffImprisonPowerCard -= switchImprisonButton;
         }
 
         private void PlayTurnFunction()
@@ -85,7 +87,7 @@ namespace TileGame
             powerNameText.SetText(text);
         }
 
-        private void changePlayButtonText(bool isImprisoned)
+        private void ChangePlayButtonText(bool isImprisoned)
         {
             if (isImprisoned)
             {
@@ -97,28 +99,26 @@ namespace TileGame
             }
         }
 
-        private void switchButtonBackwards(bool isImprisoned)
+        private void SetInactiveGameObject(GameObject gameObject, bool value)
         {
-            if (isImprisoned)
+            if (value)
             {
-                backwardsButton.gameObject.SetActive(false);
+                gameObject.SetActive(false);
             }
             else
             {
-                backwardsButton.gameObject.SetActive(true);
+                gameObject.SetActive(true);
             }
+        }
+
+        private void switchButtonBackwards(bool isImprisoned)
+        {
+            SetInactiveGameObject(backwardsButton.gameObject, isImprisoned);
         }
 
         private void switchImprisonButton(bool isImprisoned)
         {
-            if (isImprisoned)
-            {
-                imprisonButton.gameObject.SetActive(false);
-            }
-            else
-            {
-                imprisonButton.gameObject.SetActive(true);
-            }
+            SetInactiveGameObject(imprisonButton.gameObject, isImprisoned);
         }
     }
 }
