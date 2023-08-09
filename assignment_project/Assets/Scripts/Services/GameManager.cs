@@ -82,30 +82,18 @@ namespace TileGame.MainGame
             currentPlayerTurn = playersList[turnIndex % numOfPlayers];
 
             // MOVE function
-            // change tilePos value in PM
-            int currentTilePos = currentPlayerTurn.PlayerModel.TilePosition;
-            int moveDirection = (int)currentPlayerTurn.PlayerModel.MoveDirection;
-            int newTilePos = currentTilePos + (moveDirection * diceValue);
-            if (newTilePos > totalTiles - 1)
-            {
-                moveDirection *= -1;
-                currentPlayerTurn.PlayerModel.MoveDirection = (PlayerMoveDirection)moveDirection;
-                int offset = newTilePos - (totalTiles - 1);
-                newTilePos = totalTiles - 1 - offset;
-            }
-            if (newTilePos < 0)
-            {
-                moveDirection *= -1;
-                currentPlayerTurn.PlayerModel.MoveDirection = (PlayerMoveDirection)moveDirection;
-                int offset = newTilePos;
-                newTilePos = 0 + offset * -1;
-            }
+            ICommand moveCommand = new MoveCommand(currentPlayerTurn, totalTiles - 1);
 
-            currentPlayerTurn.PlayerModel.TilePosition = newTilePos;
-            // get value of tile from tile list
-            currentTilePosition.x = tileListController.GetTilePositionX(currentPlayerTurn.PlayerModel.TilePosition);
-            // move transform value
-            currentPlayerTurn.MoveCurrentPosition(currentTilePosition.x);
+            for (int i = 0; i < diceValue; i++)
+            {
+                int tilePos = moveCommand.Execute();
+
+                // these functions can be removed if invoking action from tile position 
+                // value change in PlayerModel... would require hard ref in PController
+                // or by making GameManager global access via singleton
+                currentTilePosition.x = tileListController.GetTilePositionX(tilePos);
+                currentPlayerTurn.MoveCurrentPosition(currentTilePosition.x);
+            }
 
             turnIndex++;
 
