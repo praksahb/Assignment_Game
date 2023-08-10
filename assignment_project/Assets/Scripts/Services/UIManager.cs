@@ -19,9 +19,8 @@ namespace TileGame
 
         private TextMeshProUGUI playButtonText;
 
-        public Action OnTurnChange;
+        public Action<bool> DisplayDiceSwitch;
         public Action<bool> UpdatePlayButtonText;
-
         public Action<bool> SwitchOffBackwardsPowerCard;
         public Action<bool> SwitchOffImprisonPowerCard;
 
@@ -33,8 +32,9 @@ namespace TileGame
             gameManager.RolledDice += UpdateDiceRollValue;
             gameManager.TurnChangeUpdates += UpdateTurnChangeValues;
             UpdatePlayButtonText += ChangePlayButtonText;
-            SwitchOffBackwardsPowerCard += switchButtonBackwards;
-            SwitchOffImprisonPowerCard += switchImprisonButton;
+            SwitchOffBackwardsPowerCard += SwitchButtonBackwards;
+            SwitchOffImprisonPowerCard += SwitchImprisonButton;
+            DisplayDiceSwitch += DisplayDiceSwitchFunction;
         }
 
         private void Start()
@@ -51,14 +51,15 @@ namespace TileGame
             gameManager.RolledDice -= UpdateDiceRollValue;
             gameManager.TurnChangeUpdates -= UpdateTurnChangeValues;
             UpdatePlayButtonText -= ChangePlayButtonText;
-            SwitchOffBackwardsPowerCard -= switchButtonBackwards;
-            SwitchOffImprisonPowerCard -= switchImprisonButton;
+            SwitchOffBackwardsPowerCard -= SwitchButtonBackwards;
+            SwitchOffImprisonPowerCard -= SwitchImprisonButton;
+            DisplayDiceSwitch -= DisplayDiceSwitchFunction;
         }
 
         private void PlayTurnFunction()
         {
             gameManager.PlayTurn();
-            OnTurnChange?.Invoke();
+            gameManager.OnTurnChange();
         }
 
         private void ActivateBackwardsPower()
@@ -76,14 +77,14 @@ namespace TileGame
             diceRollText.SetText("Dice Roll: {0}", value);
         }
 
-        private void UpdateTurnChangeValues(string playerName, string powerName)
+        private void UpdateTurnChangeValues(string playerName, string statusName)
         {
             string text = "Current Turn: ";
             text += playerName;
             nameText.SetText(text);
 
             text = "Active Power: ";
-            text += powerName;
+            text += statusName;
             powerNameText.SetText(text);
         }
 
@@ -111,14 +112,26 @@ namespace TileGame
             }
         }
 
-        private void switchButtonBackwards(bool isImprisoned)
+        private void SwitchButtonBackwards(bool isImprisoned)
         {
             SetInactiveGameObject(backwardsButton.gameObject, isImprisoned);
         }
 
-        private void switchImprisonButton(bool isImprisoned)
+        private void SwitchImprisonButton(bool isImprisoned)
         {
             SetInactiveGameObject(imprisonButton.gameObject, isImprisoned);
+        }
+
+        private void DisplayDiceSwitchFunction(bool value)
+        {
+            if (value)
+            {
+                diceRollText.gameObject.SetActive(true);
+            }
+            else
+            {
+                diceRollText.gameObject.SetActive(false);
+            }
         }
     }
 }

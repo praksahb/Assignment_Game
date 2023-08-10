@@ -21,6 +21,7 @@ namespace TileGame.Tiles
         {
             if (index < 0 || index > tileList.Length)
             {
+                Debug.LogFormat("index: {0}", index);
                 throw new Exception();
             }
 

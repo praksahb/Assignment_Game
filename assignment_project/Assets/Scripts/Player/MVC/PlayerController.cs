@@ -57,14 +57,18 @@ namespace TileGame.Player
                     {
                         // move backwards
                         PlayerModel.IsMovingBackwards = true;
-                        PlayerModel.MoveBackwards = powerCardInt;
+                        PlayerModel.CurrentStatus = Status.Backwards;
+                        PlayerModel.TurnsEffected = 1;
+                        //PlayerModel.MoveBackwards = powerCardInt;
                         break;
                     }
                 case PowerCardType.Imprison:
                     {
                         // imprison the player for two turns
+                        PlayerModel.CurrentStatus = Status.Imprisoned;
                         PlayerModel.IsImprisoned = true;
-                        PlayerModel.ImprisonedTurns = powerCardInt;
+                        //PlayerModel.ImprisonedTurns = powerCardInt;
+                        PlayerModel.TurnsEffected = powerCardInt;
                         break;
                     }
             }

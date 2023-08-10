@@ -1044,7 +1044,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Active Power: None'
+  m_text: 'Status: None'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1416,6 +1416,7 @@ MonoBehaviour:
   uiManager: {fileID: 1272835924}
   backwardsPowerCard: {fileID: 11400000, guid: c01ca1aef83741b4e8a85b55af9718e3, type: 2}
   imprisonedPowerCard: {fileID: 11400000, guid: 67422b7f9d115df4a9390fcbdb8eb91c, type: 2}
+  cardList: {fileID: 11400000, guid: 3b48294c347aa6e488554871c4465c8f, type: 2}
 --- !u!4 &1287285247
 Transform:
   m_ObjectHideFlags: 0

@@ -38,6 +38,10 @@ namespace TileGame.Player
                 {
                     MoveBackwards = 1;
                 }
+                else
+                {
+                    MoveBackwards = -1;
+                }
             }
         }
         private int moveBackwards;
@@ -60,22 +64,61 @@ namespace TileGame.Player
             }
         }
 
-        private int imprisonedTurns;
-        public int ImprisonedTurns
+        //private int imprisonedTurns;
+        //public int ImprisonedTurns
+        //{
+        //    get { return imprisonedTurns; }
+        //    set
+        //    {
+        //        imprisonedTurns = value;
+        //        if (imprisonedTurns == 0)
+        //        {
+        //            IsImprisoned = false;
+        //        }
+        //    }
+        //}
+
+        private PowerCardsBase[] availableCards;
+        public PowerCardsBase[] AvailableCards
         {
-            get { return imprisonedTurns; }
+            get
+            {
+                return availableCards;
+            }
             set
             {
-                imprisonedTurns = value;
-                if (imprisonedTurns == 0)
+                availableCards = value;
+            }
+        }
+
+        private Status currentStatus;
+        public Status CurrentStatus
+        {
+            get { return currentStatus; }
+            set
+            {
+                currentStatus = value;
+            }
+        }
+
+        private int turnsEffected;
+        public int TurnsEffected
+        {
+            get { return turnsEffected; }
+            set
+            {
+                turnsEffected = value;
+                if (turnsEffected == 0)
                 {
+                    CurrentStatus = Status.None;
+                    IsMovingBackwards = false;
                     IsImprisoned = false;
                 }
             }
         }
 
         //constructor
-        public PlayerModel(PlayerType playerType, int position)
+        public PlayerModel(PlayerType playerType, int position, PowerCardsBase[] powerCardsList)
         {
             PlayerType = playerType;
             // only works for 2 players
@@ -85,9 +128,19 @@ namespace TileGame.Player
 
             TilePosition = position;
 
-            MoveBackwards = 1;
-            IsImprisoned = false;
-            imprisonedTurns = 0;
+            IsMovingBackwards = false;
+            //MoveBackwards = 1;
+            //IsImprisoned = false;
+            //imprisonedTurns = 0;
+
+            AvailableCards = new PowerCardsBase[powerCardsList.Length];
+            for (int i = 0; i < powerCardsList.Length; i++)
+            {
+                AvailableCards[i] = powerCardsList[i];
+            }
+
+            TurnsEffected = 0;
+            //CurrentStatus = Status.None;
         }
     }
 }
