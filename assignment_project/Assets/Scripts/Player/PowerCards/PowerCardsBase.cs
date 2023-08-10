@@ -7,6 +7,7 @@ namespace TileGame
     {
         public string cardName;
         public PowerCardType cardType;
+        public bool isUsed;
         public abstract void ApplyEffect(PlayerController player);
     }
 }

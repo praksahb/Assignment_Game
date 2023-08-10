@@ -6,8 +6,5 @@ namespace TileGame.Player
     {
 
         public PlayerController PlayerController { get; set; }
-
-
-
     }
 }

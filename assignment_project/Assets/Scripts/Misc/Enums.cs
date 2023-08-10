@@ -19,4 +19,11 @@ namespace TileGame
         MoveBackward,
         Imprison
     }
+
+    public enum Status
+    {
+        None,
+        Backwards,
+        Imprisoned,
+    }
 }
