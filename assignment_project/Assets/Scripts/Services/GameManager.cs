@@ -7,22 +7,17 @@ namespace TileGame.MainGame
     // trying it without generic singleton for modularity
     public class GameManager : MonoBehaviour
     {
-        [SerializeField]
-        private PlayerView playerRedPrefab;
-        [SerializeField]
-        private PlayerView playerBluePrefab;
-        [SerializeField]
-        private int numOfPlayers;
-        [SerializeField]
-        private TileView tilePrefab;
-        [SerializeField]
-        private float distanceBetweenTiles = 1.1f;
-        [SerializeField]
-        private int totalTiles = 10;
+        [SerializeField] private PlayerView playerRedPrefab;
+        [SerializeField] private PlayerView playerBluePrefab;
+        [SerializeField] private int numOfPlayers;
+        [SerializeField] private TileView tilePrefab;
+        [SerializeField] private float distanceBetweenTiles = 1.1f;
+        [SerializeField] private int totalTiles = 10;
 
         [SerializeField] private UIManager uiManager;
         [SerializeField] private BackwardsPowerCard backwardsPowerCard;
         [SerializeField] private ImprisonPowerCard imprisonedPowerCard;
+        [SerializeField] private PowerCardsList powerCardsList;
 
         // game obj private references
         private PlayerController playerRed;
@@ -194,7 +189,6 @@ namespace TileGame.MainGame
                 uiManager.SwitchOffBackwardsPowerCard?.Invoke(false);
                 uiManager.SwitchOffImprisonPowerCard?.Invoke(false);
             }
-
         }
 
         private void activatePowerCard(PowerCardType powerCardType)
