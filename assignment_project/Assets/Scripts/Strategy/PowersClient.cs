@@ -2,13 +2,13 @@
 
 namespace TileGame
 {
-    public class ApplyPowerCommand : ICommand
+    public class PowersClient
     {
-        private PlayerController[] effectedPlayers;
+        private IPowersInterface powersInterface;
         private PlayerController effectingPlayer;
-        private PowerCardsBase currentPowerCard;
+        private PlayerController[] effectedPlayers;
 
-        public ApplyPowerCommand(PlayerController[] playersList, int currentPlayerIdx, PowerCardsBase currentPowerCard)
+        public PowersClient(PlayerController[] playersList, int currentPlayerIdx, IPowersInterface currentPowerStrategy)
         {
             effectedPlayers = new PlayerController[playersList.Length - 1];
 
@@ -25,19 +25,17 @@ namespace TileGame
                 }
             }
 
-            this.currentPowerCard = currentPowerCard;
+            powersInterface = currentPowerStrategy;
         }
 
-        public int Execute()
+        public void Execute()
         {
-            effectingPlayer.ActivatePowerCard(currentPowerCard.cardType, currentPowerCard.turnLife);
+            powersInterface.ActivatePowerCard(effectingPlayer);
 
             for (int i = 0; i < effectedPlayers.Length; i++)
             {
-                currentPowerCard.ApplyEffect(effectedPlayers[i]);
+                powersInterface.ApplyPowerEffects(effectedPlayers[i]);
             }
-
-            return 0;
         }
     }
 }

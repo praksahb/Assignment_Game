@@ -15,5 +15,5 @@ MonoBehaviour:
   cardName: Imprison
   cardType: 2
   isUsed: 0
-  turnLife: 2
+  turnLifeDuration: 2
   imprisonTurns: 2
