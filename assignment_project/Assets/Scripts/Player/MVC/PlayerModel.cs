@@ -4,8 +4,7 @@ namespace TileGame.Player
     {
         public PlayerType PlayerType { get; }
 
-        private string playerName;
-        public string PlayerName { get { return playerName; } }
+        public string PlayerName { get; }
 
         private PlayerMoveDirection moveDirection;
         public PlayerMoveDirection MoveDirection
@@ -64,33 +63,6 @@ namespace TileGame.Player
             }
         }
 
-        //private int imprisonedTurns;
-        //public int ImprisonedTurns
-        //{
-        //    get { return imprisonedTurns; }
-        //    set
-        //    {
-        //        imprisonedTurns = value;
-        //        if (imprisonedTurns == 0)
-        //        {
-        //            IsImprisoned = false;
-        //        }
-        //    }
-        //}
-
-        private PowerCardsBase[] availableCards;
-        public PowerCardsBase[] AvailableCards
-        {
-            get
-            {
-                return availableCards;
-            }
-            set
-            {
-                availableCards = value;
-            }
-        }
-
         private Status currentStatus;
         public Status CurrentStatus
         {
@@ -117,30 +89,58 @@ namespace TileGame.Player
             }
         }
 
+        private int powerDuration;
+        public int PowerDurationTurns
+        {
+            get { return powerDuration; }
+            set
+            {
+                powerDuration = value;
+                if (powerDuration == 0)
+                {
+                    ActivePower = PowerCardType.None;
+                }
+            }
+        }
+
+        private PowerCardType activePower;
+        public PowerCardType ActivePower
+        {
+            get { return activePower; }
+            set
+            {
+                activePower = value;
+
+                // sent action for imprisoned and none to change button displays
+                if (activePower == PowerCardType.Imprison)
+                {
+                    // perform ui actions to modify buttons
+                    // check once to see if actions does not effect for all player types
+                    // else pass normally by refs
+                }
+                else // works for both backwards and forward
+                {
+                    // display the buttons and dice roll value
+                }
+
+            }
+        }
+
         //constructor
-        public PlayerModel(PlayerType playerType, int position, PowerCardsBase[] powerCardsList)
+        public PlayerModel(PlayerType playerType, int position)
         {
             PlayerType = playerType;
             // only works for 2 players
-            playerName = PlayerType == PlayerType.Red ? "Red" : "Blue";
+            PlayerName = PlayerType == PlayerType.Red ? "Red" : "Blue";
 
             MoveDirection = PlayerType == PlayerType.Red ? PlayerMoveDirection.MoveRight : PlayerMoveDirection.MoveLeft;
 
             TilePosition = position;
 
             IsMovingBackwards = false;
-            //MoveBackwards = 1;
-            //IsImprisoned = false;
-            //imprisonedTurns = 0;
-
-            AvailableCards = new PowerCardsBase[powerCardsList.Length];
-            for (int i = 0; i < powerCardsList.Length; i++)
-            {
-                AvailableCards[i] = powerCardsList[i];
-            }
 
             TurnsEffected = 0;
-            //CurrentStatus = Status.None;
+            PowerDurationTurns = 0;
         }
     }
 }

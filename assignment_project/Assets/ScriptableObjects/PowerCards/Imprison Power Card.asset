@@ -13,5 +13,7 @@ MonoBehaviour:
   m_Name: Imprison Power Card
   m_EditorClassIdentifier: 
   cardName: Imprison
-  cardType: 1
+  cardType: 2
+  isUsed: 0
+  turnLife: 2
   imprisonTurns: 2

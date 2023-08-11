@@ -17,13 +17,13 @@ namespace TileGame.MainGame
         [SerializeField] private UIManager uiManager;
         [SerializeField] private BackwardsPowerCard backwardsPowerCard;
         [SerializeField] private ImprisonPowerCard imprisonedPowerCard;
-        [SerializeField] private PowerCardsList cardList;
+        //[SerializeField] private PowerCardsList cardList;
 
         // game obj private references
         private PlayerController playerRed;
         private PlayerController playerBlue;
         private TileListController tileListController;
-        private PlayerController currentPlayerTurn;
+        private PlayerController currentPlayer;
 
         // pvt variables to be reused
         private Vector3 currentTilePosition;
@@ -31,7 +31,8 @@ namespace TileGame.MainGame
         private int playerBluePosition;
         private int turnIndex = 0;
         private PlayerController[] playersList;
-        private PowerCardsBase[] activePowerCard;
+
+        //private PowerCardsBase[] activePowerCard;
 
         //Actions 
         public System.Action<int> RolledDice;
@@ -52,13 +53,12 @@ namespace TileGame.MainGame
         {
             playerBluePosition = totalTiles - 1;
             playersList = new PlayerController[numOfPlayers];
-            activePowerCard = new PowerCardsBase[numOfPlayers];
             InitializeGame();
         }
 
         private void InitializeGame()
         {
-            // instantiate tiles
+            // instantiate tiles list manager
             tileListController = new TileListController(totalTiles, tilePrefab, distanceBetweenTiles);
 
             // instantiate player objs
@@ -68,22 +68,20 @@ namespace TileGame.MainGame
         private void InitializePlayers()
         {
             // red is on left start
-            PlayerModel playerRedModel = new PlayerModel(PlayerType.Red, playerRedPosition, cardList.powerCardsList);
+            PlayerModel playerRedModel = new PlayerModel(PlayerType.Red, playerRedPosition);
             currentTilePosition.x = tileListController.GetTilePositionX(playerRedModel.TilePosition);
-            playerRed = new PlayerController(playerRedModel, playerRedPrefab, currentTilePosition.x);
+            playerRed = new PlayerController(playerRedModel, playerRedPrefab, currentTilePosition.x, uiManager);
             playersList[turnIndex++] = playerRed;
             // blue is on right end
-            PlayerModel playerBlueModel = new PlayerModel(PlayerType.Blue, playerBluePosition, cardList.powerCardsList);
+            PlayerModel playerBlueModel = new PlayerModel(PlayerType.Blue, playerBluePosition);
             currentTilePosition.x = tileListController.GetTilePositionX(playerBlueModel.TilePosition);
-            playerBlue = new PlayerController(playerBlueModel, playerBluePrefab, currentTilePosition.x);
+            playerBlue = new PlayerController(playerBlueModel, playerBluePrefab, currentTilePosition.x, uiManager);
             playersList[turnIndex++] = playerBlue;
 
             // reset turnindex
             turnIndex = 0;
-            currentPlayerTurn = playersList[turnIndex % numOfPlayers];
-            string playerName = currentPlayerTurn.PlayerModel.PlayerName;
-            string statusName = "None";
-            TurnChangeUpdates?.Invoke(playerName, statusName);
+
+            ChangeTurnUI();
         }
 
         public void PlayTurn()
@@ -93,152 +91,94 @@ namespace TileGame.MainGame
             // Invoke Action - received by UIManager
             RolledDice?.Invoke(diceValue);
 
-            //if (activePowerCard[turnIndex % numOfPlayers] != null)
-            //{
-            //    activePowerCard[turnIndex % numOfPlayers].ApplyEffect(currentPlayerTurn);
-            //    activePowerCard[turnIndex % numOfPlayers] = null;
-            //}
+            if (currentPlayer.PlayerModel.ActivePower != PowerCardType.None)
+            {
+                currentPlayer.PlayerModel.PowerDurationTurns--;
+            }
 
-            Debug.LogFormat("Curr: {0}", currentPlayerTurn.PlayerModel.IsImprisoned);
-            if (currentPlayerTurn.PlayerModel.CurrentStatus != Status.Imprisoned)
+            if (currentPlayer.PlayerModel.CurrentStatus != Status.Imprisoned)
             {
                 // MOVE function
-                ICommand moveCommand = new MoveCommand(currentPlayerTurn, totalTiles - 1);
-
-                //bool isBackwardsActive = currentPlayerTurn.PlayerModel.IsMovingBackwards;
+                ICommand moveCommand = new MoveCommand(currentPlayer, totalTiles - 1);
 
                 for (int i = 0; i < diceValue; i++)
                 {
-                    if (currentPlayerTurn.PlayerModel.IsMovingBackwards && (currentPlayerTurn.PlayerModel.TilePosition == 0 || currentPlayerTurn.PlayerModel.TilePosition == totalTiles - 1))
+                    if (currentPlayer.PlayerModel.IsMovingBackwards && (currentPlayer.PlayerModel.TilePosition == 0 || currentPlayer.PlayerModel.TilePosition == totalTiles - 1))
                     {
                         break;
                     }
                     int tilePos = moveCommand.Execute();
                     currentTilePosition.x = tileListController.GetTilePositionX(tilePos);
-                    currentPlayerTurn.MoveCurrentPosition(currentTilePosition.x);
+                    currentPlayer.PlayerView.MoveCurrentPosition(currentTilePosition.x);
                 }
-
-                //// reset backwards 
-                //if (isBackwardsActive)
-                //{
-                //    currentPlayerTurn.PlayerModel.IsMovingBackwards = false;
-                //}
             }
 
             turnIndex++;
-            if (currentPlayerTurn.PlayerModel.CurrentStatus != Status.None)
+            if (currentPlayer.PlayerModel.CurrentStatus != Status.None)
             {
-                currentPlayerTurn.PlayerModel.TurnsEffected--;
+                currentPlayer.PlayerModel.TurnsEffected--;
             }
-
-
-            //// reduce value for imprisoned turns
-            //if (currentPlayerTurn.PlayerModel.IsImprisoned)
-            //{
-            //    currentPlayerTurn.PlayerModel.ImprisonedTurns--;
-            //    if (currentPlayerTurn.PlayerModel.IsImprisoned)
-            //    {
-            //        // invoke events for setting off buttons for play cards
-            //        uiManager.SwitchOffBackwardsPowerCard?.Invoke(true);
-            //        uiManager.SwitchOffImprisonPowerCard?.Invoke(true);
-            //    }
-            //}
-            //else
-            //{
-            //    uiManager.SwitchOffBackwardsPowerCard?.Invoke(false);
-            //    uiManager.SwitchOffImprisonPowerCard?.Invoke(false);
-            //}
         }
 
         private void ActivatePowerCard(PowerCardType powerCardType)
         {
             if (powerCardType == PowerCardType.MoveBackward)
             {
-                activePowerCard[(turnIndex + 1) % numOfPlayers] = backwardsPowerCard;
                 //apply effect directly?
                 ApplyPowerCommand powerMove = new ApplyPowerCommand(playersList, (turnIndex % numOfPlayers), backwardsPowerCard);
                 powerMove.Execute();
             }
             if (powerCardType == PowerCardType.Imprison)
             {
-                activePowerCard[(turnIndex + 1) % numOfPlayers] = imprisonedPowerCard;
                 ApplyPowerCommand powerMove = new ApplyPowerCommand(playersList, (turnIndex % numOfPlayers), imprisonedPowerCard);
                 powerMove.Execute();
             }
         }
 
+        // this does not need to be in game manager 
+        //public void OnTurnChange()
+        //{
+        //    // check current player's values to modify ui elements
+        //    currentPlayer = playersList[turnIndex % numOfPlayers];
 
-        public void OnTurnChange()
+        //    string playerName = currentPlayer.PlayerModel.PlayerName;
+        //    string statusName;
+        //    // status name
+        //    if (currentPlayer.PlayerModel.CurrentStatus == Status.None)
+        //    {
+        //        statusName = "None";
+        //        uiManager.DisplayDiceSwitch?.Invoke(true);
+        //        uiManager.UpdatePlayButtonText?.Invoke(false);
+        //        uiManager.SwitchOffBackwardsPowerCard?.Invoke(false);
+        //        uiManager.SwitchOffImprisonPowerCard?.Invoke(false);
+        //    }
+        //    else if (currentPlayer.PlayerModel.CurrentStatus == Status.Backwards)
+        //    {
+        //        statusName = "Backwards";
+        //        uiManager.DisplayDiceSwitch?.Invoke(true);
+        //        uiManager.UpdatePlayButtonText?.Invoke(false);
+        //        uiManager.SwitchOffBackwardsPowerCard?.Invoke(false);
+        //        uiManager.SwitchOffImprisonPowerCard?.Invoke(false);
+        //    }
+        //    // imprisoned
+        //    else
+        //    {
+        //        statusName = "Imprisoned";
+        //        // dont show dice roll either
+        //        uiManager.DisplayDiceSwitch?.Invoke(false);
+        //        uiManager.UpdatePlayButtonText?.Invoke(true);
+        //        uiManager.SwitchOffBackwardsPowerCard?.Invoke(true);
+        //        uiManager.SwitchOffImprisonPowerCard?.Invoke(true);
+        //    }
+        //    // invoke top row changes
+        //    TurnChangeUpdates?.Invoke(playerName, statusName);
+        //}
+
+        public void ChangeTurnUI()
         {
-            // check current player's values to modify ui elements
-            currentPlayerTurn = playersList[turnIndex % numOfPlayers];
+            currentPlayer = playersList[turnIndex % numOfPlayers];
 
-            string playerName = currentPlayerTurn.PlayerModel.PlayerName;
-            string statusName;
-            // status name
-            if (currentPlayerTurn.PlayerModel.CurrentStatus == Status.None)
-            {
-                statusName = "None";
-                uiManager.DisplayDiceSwitch?.Invoke(true);
-                uiManager.UpdatePlayButtonText?.Invoke(false);
-                uiManager.SwitchOffBackwardsPowerCard?.Invoke(false);
-                uiManager.SwitchOffImprisonPowerCard?.Invoke(false);
-            }
-            else if (currentPlayerTurn.PlayerModel.CurrentStatus == Status.Backwards)
-            {
-                statusName = "Backwards";
-                uiManager.DisplayDiceSwitch?.Invoke(true);
-                uiManager.UpdatePlayButtonText?.Invoke(false);
-                uiManager.SwitchOffBackwardsPowerCard?.Invoke(false);
-                uiManager.SwitchOffImprisonPowerCard?.Invoke(false);
-            }
-            // imprisoned
-            else
-            {
-                statusName = "Imprisoned";
-                // dont show dice roll either
-                uiManager.DisplayDiceSwitch?.Invoke(false);
-                uiManager.UpdatePlayButtonText?.Invoke(true);
-                uiManager.SwitchOffBackwardsPowerCard?.Invoke(true);
-                uiManager.SwitchOffImprisonPowerCard?.Invoke(true);
-            }
-            // invoke top row changes
-            TurnChangeUpdates?.Invoke(playerName, statusName);
-
-
-            //if (activePowerCard[turnIndex % numOfPlayers] == null)
-            //{
-            //    powerName = "None";
-            //}
-            //else
-            //{
-            //    powerName = activePowerCard[turnIndex % numOfPlayers].cardName;
-            //}
-            //if (currentPlayerTurn.PlayerModel.IsImprisoned)
-            //{
-            //    powerName = "Imprison";
-            //}
-            //TurnChangeUpdates?.Invoke(playerName, powerName);
-
-            //if (activePowerCard[turnIndex % numOfPlayers] != null && activePowerCard[turnIndex % numOfPlayers].cardType == PowerCardType.Imprison)
-            //{
-            //    uiManager.UpdatePlayButtonText?.Invoke(true);
-            //    uiManager.SwitchOffBackwardsPowerCard?.Invoke(true);
-            //    uiManager.SwitchOffImprisonPowerCard?.Invoke(true);
-            //}
-
-            //if (currentPlayerTurn.PlayerModel.IsImprisoned == true || playersList[(turnIndex + 1) % numOfPlayers].PlayerModel.IsImprisoned == true)
-            //{
-            //    uiManager.UpdatePlayButtonText?.Invoke(true);
-            //    uiManager.SwitchOffBackwardsPowerCard?.Invoke(true);
-            //    uiManager.SwitchOffImprisonPowerCard?.Invoke(true);
-            //}
-            //else
-            //{
-            //    uiManager.UpdatePlayButtonText?.Invoke(false);
-            //    uiManager.SwitchOffBackwardsPowerCard?.Invoke(false);
-            //    uiManager.SwitchOffImprisonPowerCard?.Invoke(false);
-            //}
+            currentPlayer.PlayerView.TurnChangeUpdateUI();
         }
     }
 }

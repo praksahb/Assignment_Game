@@ -10,7 +10,7 @@ namespace TileGame
 
         public override void ApplyEffect(PlayerController player)
         {
-            player.ApplyPowerCard(cardType, backwardDirection);
+            player.ApplyPowerEffects(cardType, backwardDirection);
         }
     }
 }
