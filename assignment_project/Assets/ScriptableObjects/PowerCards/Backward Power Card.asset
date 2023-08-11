@@ -13,5 +13,7 @@ MonoBehaviour:
   m_Name: Backward Power Card
   m_EditorClassIdentifier: 
   cardName: Backwards
-  cardType: 0
+  cardType: 1
+  isUsed: 0
+  turnLife: 1
   backwardDirection: -1

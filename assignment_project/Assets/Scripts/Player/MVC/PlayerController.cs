@@ -7,8 +7,9 @@ namespace TileGame.Player
     {
         public PlayerModel PlayerModel { get; }
         public PlayerView PlayerView { get; }
+        public UIManager UiManager { get; }
 
-        public PlayerController(PlayerModel playerModel, PlayerView playerView, float tilePositionX)
+        public PlayerController(PlayerModel playerModel, PlayerView playerView, float tilePositionX, UIManager uiManager)
         {
             PlayerModel = playerModel;
             PlayerView = Object.Instantiate(playerView);
@@ -17,14 +18,8 @@ namespace TileGame.Player
             PlayerView.PlayerController = this;
 
             // Move at tile position
-            MoveCurrentPosition(tilePositionX);
-        }
-
-        public void MoveCurrentPosition(float xPos)
-        {
-            Vector3 position = PlayerView.transform.position;
-            position.x = xPos;
-            PlayerView.transform.position = position;
+            PlayerView.MoveCurrentPosition(tilePositionX);
+            UiManager = uiManager;
         }
 
         public int MovePlayer(int tileEndIndex)
@@ -49,7 +44,26 @@ namespace TileGame.Player
             return PlayerModel.TilePosition;
         }
 
-        public void ApplyPowerCard(PowerCardType cardType, int powerCardInt)
+        public void ActivatePowerCard(PowerCardType powerCardType, int turnLifeDuration)
+        {
+            switch (powerCardType)
+            {
+                case PowerCardType.MoveBackward:
+                    {
+                        PlayerModel.ActivePower = powerCardType;
+                        PlayerModel.PowerDurationTurns = turnLifeDuration;
+                        break;
+                    }
+                case PowerCardType.Imprison:
+                    {
+                        PlayerModel.ActivePower = powerCardType;
+                        PlayerModel.PowerDurationTurns = turnLifeDuration;
+                        break;
+                    }
+            }
+        }
+
+        public void ApplyPowerEffects(PowerCardType cardType, int turnsEffected)
         {
             switch (cardType)
             {
@@ -58,8 +72,7 @@ namespace TileGame.Player
                         // move backwards
                         PlayerModel.IsMovingBackwards = true;
                         PlayerModel.CurrentStatus = Status.Backwards;
-                        PlayerModel.TurnsEffected = 1;
-                        //PlayerModel.MoveBackwards = powerCardInt;
+                        PlayerModel.TurnsEffected = turnsEffected;
                         break;
                     }
                 case PowerCardType.Imprison:
@@ -67,13 +80,10 @@ namespace TileGame.Player
                         // imprison the player for two turns
                         PlayerModel.CurrentStatus = Status.Imprisoned;
                         PlayerModel.IsImprisoned = true;
-                        //PlayerModel.ImprisonedTurns = powerCardInt;
-                        PlayerModel.TurnsEffected = powerCardInt;
+                        PlayerModel.TurnsEffected = turnsEffected;
                         break;
                     }
             }
-
-
         }
     }
 }

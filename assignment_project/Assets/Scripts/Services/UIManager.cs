@@ -19,6 +19,7 @@ namespace TileGame
 
         private TextMeshProUGUI playButtonText;
 
+        public Action<string, string> TurnChangeUpdates;
         public Action<bool> DisplayDiceSwitch;
         public Action<bool> UpdatePlayButtonText;
         public Action<bool> SwitchOffBackwardsPowerCard;
@@ -30,7 +31,7 @@ namespace TileGame
             backwardsButton.onClick.AddListener(ActivateBackwardsPower);
             imprisonButton.onClick.AddListener(ActivateImprisonPower);
             gameManager.RolledDice += UpdateDiceRollValue;
-            gameManager.TurnChangeUpdates += UpdateTurnChangeValues;
+            TurnChangeUpdates += UpdateTurnChangeValues;
             UpdatePlayButtonText += ChangePlayButtonText;
             SwitchOffBackwardsPowerCard += SwitchButtonBackwards;
             SwitchOffImprisonPowerCard += SwitchImprisonButton;
@@ -49,7 +50,7 @@ namespace TileGame
             backwardsButton.onClick.RemoveAllListeners();
             imprisonButton.onClick.RemoveAllListeners();
             gameManager.RolledDice -= UpdateDiceRollValue;
-            gameManager.TurnChangeUpdates -= UpdateTurnChangeValues;
+            TurnChangeUpdates -= UpdateTurnChangeValues;
             UpdatePlayButtonText -= ChangePlayButtonText;
             SwitchOffBackwardsPowerCard -= SwitchButtonBackwards;
             SwitchOffImprisonPowerCard -= SwitchImprisonButton;
@@ -59,7 +60,7 @@ namespace TileGame
         private void PlayTurnFunction()
         {
             gameManager.PlayTurn();
-            gameManager.OnTurnChange();
+            gameManager.ChangeTurnUI();
         }
 
         private void ActivateBackwardsPower()
@@ -83,7 +84,7 @@ namespace TileGame
             text += playerName;
             nameText.SetText(text);
 
-            text = "Active Power: ";
+            text = "Status: ";
             text += statusName;
             powerNameText.SetText(text);
         }

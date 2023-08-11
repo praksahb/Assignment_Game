@@ -16,6 +16,7 @@ namespace TileGame
 
     public enum PowerCardType
     {
+        None,
         MoveBackward,
         Imprison
     }
