@@ -4,13 +4,21 @@ using UnityEngine;
 namespace TileGame
 {
     [CreateAssetMenu(fileName = "Imprison Power Card", menuName = "Power Cards/Imprison")]
-    public class ImprisonPowerCard : PowerCardsBase
+    public class ImprisonPowerCard : PowerCardsBase, IPowersInterface
     {
         public int imprisonTurns = 2;
 
-        public override void ApplyEffect(PlayerController player)
+        public void ApplyPowerEffects(PlayerController player)
         {
-            player.ApplyPowerEffects(cardType, turnLife);
+            player.PlayerModel.CurrentStatus = Status.Imprisoned;
+            player.PlayerModel.IsImprisoned = true;
+            player.PlayerModel.TurnsEffected = turnLifeDuration;
+        }
+
+        public void ActivatePowerCard(PlayerController player)
+        {
+            player.PlayerModel.ActivePower = cardType;
+            player.PlayerModel.PowerDurationTurns = turnLifeDuration;
         }
     }
 }

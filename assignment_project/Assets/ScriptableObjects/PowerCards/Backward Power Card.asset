@@ -15,5 +15,5 @@ MonoBehaviour:
   cardName: Backwards
   cardType: 1
   isUsed: 0
-  turnLife: 1
+  turnLifeDuration: 1
   backwardDirection: -1

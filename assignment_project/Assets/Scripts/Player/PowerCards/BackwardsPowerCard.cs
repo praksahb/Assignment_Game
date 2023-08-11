@@ -4,13 +4,21 @@ using UnityEngine;
 namespace TileGame
 {
     [CreateAssetMenu(fileName = "Backward Power Card", menuName = "Power Cards/Backwards")]
-    public class BackwardsPowerCard : PowerCardsBase
+    public class BackwardsPowerCard : PowerCardsBase, IPowersInterface
     {
         public int backwardDirection = -1;
 
-        public override void ApplyEffect(PlayerController player)
+        public void ApplyPowerEffects(PlayerController player)
         {
-            player.ApplyPowerEffects(cardType, backwardDirection);
+            player.PlayerModel.IsMovingBackwards = true;
+            player.PlayerModel.CurrentStatus = Status.Backwards;
+            player.PlayerModel.TurnsEffected = turnLifeDuration;
+        }
+
+        public void ActivatePowerCard(PlayerController player)
+        {
+            player.PlayerModel.ActivePower = cardType;
+            player.PlayerModel.PowerDurationTurns = turnLifeDuration;
         }
     }
 }

@@ -17,7 +17,7 @@ namespace TileGame.MainGame
         [SerializeField] private UIManager uiManager;
         [SerializeField] private BackwardsPowerCard backwardsPowerCard;
         [SerializeField] private ImprisonPowerCard imprisonedPowerCard;
-        //[SerializeField] private PowerCardsList cardList;
+        [SerializeField] private PowerCardsList cardList;
 
         // game obj private references
         private PlayerController playerRed;
@@ -120,19 +120,30 @@ namespace TileGame.MainGame
             }
         }
 
+        private IPowersInterface GetPowerCard(PowerCardType cardType)
+        {
+            for (int i = 0; i < cardList.powerCardsList.Length; i++)
+            {
+                if (cardType == cardList.powerCardsList[i].cardType)
+                {
+                    return (IPowersInterface)cardList.powerCardsList[i];
+                }
+            }
+            return null;
+        }
+
         private void ActivatePowerCard(PowerCardType powerCardType)
         {
-            if (powerCardType == PowerCardType.MoveBackward)
+            IPowersInterface powerCardStrategy = GetPowerCard(powerCardType);
+            if (powerCardStrategy == null)
             {
-                //apply effect directly?
-                ApplyPowerCommand powerMove = new ApplyPowerCommand(playersList, (turnIndex % numOfPlayers), backwardsPowerCard);
-                powerMove.Execute();
+                Debug.LogError("PowerCard type invalid");
+                return;
             }
-            if (powerCardType == PowerCardType.Imprison)
-            {
-                ApplyPowerCommand powerMove = new ApplyPowerCommand(playersList, (turnIndex % numOfPlayers), imprisonedPowerCard);
-                powerMove.Execute();
-            }
+
+            PowersClient powerCardClient = new PowersClient(playersList, (turnIndex % numOfPlayers), powerCardStrategy);
+
+            powerCardClient.Execute();
         }
 
         public void ChangeTurnUI()
