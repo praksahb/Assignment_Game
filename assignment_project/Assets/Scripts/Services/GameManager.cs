@@ -135,45 +135,6 @@ namespace TileGame.MainGame
             }
         }
 
-        // this does not need to be in game manager 
-        //public void OnTurnChange()
-        //{
-        //    // check current player's values to modify ui elements
-        //    currentPlayer = playersList[turnIndex % numOfPlayers];
-
-        //    string playerName = currentPlayer.PlayerModel.PlayerName;
-        //    string statusName;
-        //    // status name
-        //    if (currentPlayer.PlayerModel.CurrentStatus == Status.None)
-        //    {
-        //        statusName = "None";
-        //        uiManager.DisplayDiceSwitch?.Invoke(true);
-        //        uiManager.UpdatePlayButtonText?.Invoke(false);
-        //        uiManager.SwitchOffBackwardsPowerCard?.Invoke(false);
-        //        uiManager.SwitchOffImprisonPowerCard?.Invoke(false);
-        //    }
-        //    else if (currentPlayer.PlayerModel.CurrentStatus == Status.Backwards)
-        //    {
-        //        statusName = "Backwards";
-        //        uiManager.DisplayDiceSwitch?.Invoke(true);
-        //        uiManager.UpdatePlayButtonText?.Invoke(false);
-        //        uiManager.SwitchOffBackwardsPowerCard?.Invoke(false);
-        //        uiManager.SwitchOffImprisonPowerCard?.Invoke(false);
-        //    }
-        //    // imprisoned
-        //    else
-        //    {
-        //        statusName = "Imprisoned";
-        //        // dont show dice roll either
-        //        uiManager.DisplayDiceSwitch?.Invoke(false);
-        //        uiManager.UpdatePlayButtonText?.Invoke(true);
-        //        uiManager.SwitchOffBackwardsPowerCard?.Invoke(true);
-        //        uiManager.SwitchOffImprisonPowerCard?.Invoke(true);
-        //    }
-        //    // invoke top row changes
-        //    TurnChangeUpdates?.Invoke(playerName, statusName);
-        //}
-
         public void ChangeTurnUI()
         {
             currentPlayer = playersList[turnIndex % numOfPlayers];

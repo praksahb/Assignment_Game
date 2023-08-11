@@ -46,7 +46,6 @@ namespace TileGame.Player
 
         public void ActivatePowerCard(PowerCardType powerCardType, int turnLifeDuration)
         {
-            Debug.Log("PwCard: " + powerCardType);
             switch (powerCardType)
             {
                 case PowerCardType.MoveBackward:
