@@ -10,15 +10,19 @@ namespace TileGame.PowerCards
 
         public void ApplyPowerEffects(PlayerController player)
         {
-            player.PlayerModel.IsMovingBackwards = true;
-            player.PlayerModel.CurrentStatus = Status.Backwards;
-            player.PlayerModel.TurnsEffected = turnLifeDuration;
+            //player.PlayerModel.IsMovingBackwards = true;
+            //player.PlayerModel.CurrentStatus = Status.Backwards;
+            //player.PlayerModel.TurnsEffected = turnLifeDuration;
+
+            player.PlayerModel.SetValuesStatusBackwards(turnLifeDuration);
         }
 
         public void ActivatePowerCard(PlayerController player)
         {
-            player.PlayerModel.ActivePower = cardType;
-            player.PlayerModel.PowerDurationTurns = turnLifeDuration;
+            //player.PlayerModel.ActivePower = cardType;
+            //player.PlayerModel.PowerDurationTurns = turnLifeDuration;
+
+            player.PlayerModel.SetValActivePowerBackwards(cardType, turnLifeDuration);
         }
     }
 }

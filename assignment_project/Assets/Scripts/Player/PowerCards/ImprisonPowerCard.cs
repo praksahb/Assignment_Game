@@ -10,15 +10,19 @@ namespace TileGame.PowerCards
 
         public void ApplyPowerEffects(PlayerController player)
         {
-            player.PlayerModel.CurrentStatus = Status.Imprisoned;
-            player.PlayerModel.IsImprisoned = true;
-            player.PlayerModel.TurnsEffected = turnLifeDuration;
+            //player.PlayerModel.CurrentStatus = Status.Imprisoned;
+            //player.PlayerModel.IsImprisoned = true;
+            //player.PlayerModel.TurnsEffected = turnLifeDuration;
+
+            player.PlayerModel.SetValuesStatusImprisoned(turnLifeDuration);
         }
 
         public void ActivatePowerCard(PlayerController player)
         {
-            player.PlayerModel.ActivePower = cardType;
-            player.PlayerModel.PowerDurationTurns = turnLifeDuration;
+            //player.PlayerModel.ActivePower = cardType;
+            //player.PlayerModel.PowerDurationTurns = turnLifeDuration;
+
+            player.PlayerModel.SetValActivePowerImprison(cardType, turnLifeDuration);
         }
     }
 }
