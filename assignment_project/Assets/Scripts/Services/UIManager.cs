@@ -13,13 +13,14 @@ namespace TileGame
         [SerializeField] private Button imprisonButton;
         [SerializeField] private TextMeshProUGUI diceRollText;
         [SerializeField] private TextMeshProUGUI nameText;
+        [SerializeField] private TextMeshProUGUI statusNameText;
         [SerializeField] private TextMeshProUGUI powerNameText;
 
         [SerializeField] private GameManager gameManager;
 
         private TextMeshProUGUI playButtonText;
 
-        public Action<string, string> TurnChangeUpdates;
+        public Action<string, string, string> TurnChangeUpdates;
         public Action<bool> DisplayDiceSwitch;
         public Action<bool> UpdatePlayButtonText;
         public Action<bool> SwitchOffBackwardsPowerCard;
@@ -91,7 +92,7 @@ namespace TileGame
             diceRollText.SetText("Dice Roll: {0}", value);
         }
 
-        private void UpdateTurnChangeValues(string playerName, string statusName)
+        private void UpdateTurnChangeValues(string playerName, string statusName, string powerName)
         {
             string text = "Current Turn: ";
             text += playerName;
@@ -99,53 +100,50 @@ namespace TileGame
 
             text = "Status: ";
             text += statusName;
+            statusNameText.SetText(text);
+
+            text = "Active Power: ";
+            text += powerName;
             powerNameText.SetText(text);
         }
 
-        private void ChangePlayButtonText(bool isImprisoned)
+        private void ChangePlayButtonText(bool canPlayTurn)
         {
-            if (isImprisoned)
-            {
-                playButtonText.SetText("Skip Turn");
-            }
-            else
+            if (canPlayTurn)
             {
                 playButtonText.SetText("Play Turn");
             }
+            else
+            {
+                playButtonText.SetText("Skip Turn");
+            }
         }
 
-        private void SetInactiveGameObject(GameObject gameObject, bool value)
+        private void SetActiveGameObject(GameObject gameObject, bool value)
         {
             if (value)
             {
-                gameObject.SetActive(false);
+                gameObject.SetActive(true);
             }
             else
             {
-                gameObject.SetActive(true);
+                gameObject.SetActive(false);
             }
         }
 
-        private void SwitchButtonBackwards(bool isImprisoned)
+        private void SwitchButtonBackwards(bool value)
         {
-            SetInactiveGameObject(backwardsButton.gameObject, isImprisoned);
+            SetActiveGameObject(backwardsButton.gameObject, value);
         }
 
-        private void SwitchImprisonButton(bool isImprisoned)
+        private void SwitchImprisonButton(bool value)
         {
-            SetInactiveGameObject(imprisonButton.gameObject, isImprisoned);
+            SetActiveGameObject(imprisonButton.gameObject, value);
         }
 
         private void DisplayDiceSwitchFunction(bool value)
         {
-            if (value)
-            {
-                diceRollText.gameObject.SetActive(true);
-            }
-            else
-            {
-                diceRollText.gameObject.SetActive(false);
-            }
+            SetActiveGameObject(diceRollText.gameObject, value);
         }
     }
 }

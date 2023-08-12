@@ -15,49 +15,15 @@ namespace TileGame.Player
 
         public void TurnChangeUpdateUI()
         {
-            string playerName = PlayerController.PlayerModel.PlayerName;
-            string statusName;
-            bool displayDiceRoll, updatePlayBtnText, switchBackwardsPowerBtn, switchImprisonPowerBtn;
+            PlayerController.UiManager.DisplayDiceSwitch?.Invoke(PlayerController.PlayerModel.DisplayDiceRoll);
+            PlayerController.UiManager.UpdatePlayButtonText?.Invoke(PlayerController.PlayerModel.ChangePlayTurnBtnText);
 
-            if (PlayerController.PlayerModel.CurrentStatus == Status.None)
-            {
-                statusName = "None";
-                displayDiceRoll = true;
-                updatePlayBtnText = false;
-                switchBackwardsPowerBtn = false;
-                switchImprisonPowerBtn = false;
-            }
-            else if (PlayerController.PlayerModel.CurrentStatus == Status.Backwards)
-            {
-                statusName = "Backwards";
-                displayDiceRoll = true;
-                updatePlayBtnText = false;
-                switchBackwardsPowerBtn = false;
-                switchImprisonPowerBtn = false;
-            }
-            // imprisoned
-            else
-            {
-                statusName = "Imprisoned";
-                displayDiceRoll = false;
-                updatePlayBtnText = true;
-                switchBackwardsPowerBtn = true;
-                switchImprisonPowerBtn = true;
-            }
+            PlayerController.UiManager.SwitchOffBackwardsPowerCard?.Invoke(PlayerController.PlayerModel.DisplayBackwardsPowerCardBtn);
 
-            if (PlayerController.PlayerModel.ActivePower == PowerCardType.Imprison)
-            {
-                switchBackwardsPowerBtn = true;
-                switchImprisonPowerBtn = true;
-            }
-
-            PlayerController.UiManager.DisplayDiceSwitch?.Invoke(displayDiceRoll);
-            PlayerController.UiManager.UpdatePlayButtonText?.Invoke(updatePlayBtnText);
-            PlayerController.UiManager.SwitchOffBackwardsPowerCard?.Invoke(switchBackwardsPowerBtn);
-            PlayerController.UiManager.SwitchOffImprisonPowerCard?.Invoke(switchImprisonPowerBtn);
+            PlayerController.UiManager.SwitchOffImprisonPowerCard?.Invoke(PlayerController.PlayerModel.DisplayImprisonPowerCardBtn);
 
             // invoke top row changes
-            PlayerController.UiManager.TurnChangeUpdates?.Invoke(playerName, statusName);
+            PlayerController.UiManager.TurnChangeUpdates?.Invoke(PlayerController.PlayerModel.PlayerName, PlayerController.PlayerModel.StatusName, PlayerController.PlayerModel.ActivePowerName);
         }
     }
 }
