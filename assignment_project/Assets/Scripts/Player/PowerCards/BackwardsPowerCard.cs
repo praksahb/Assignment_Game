@@ -1,7 +1,7 @@
 ﻿using TileGame.Player;
 using UnityEngine;
 
-namespace TileGame
+namespace TileGame.PowerCards
 {
     [CreateAssetMenu(fileName = "Backward Power Card", menuName = "Power Cards/Backwards")]
     public class BackwardsPowerCard : PowerCardsBase, IPowersInterface

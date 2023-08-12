@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace TileGame
+namespace TileGame.PowerCards
 {
     [CreateAssetMenu(fileName = "ListOfPowerCards", menuName = "PowerCardsList")]
     public class PowerCardsList : ScriptableObject

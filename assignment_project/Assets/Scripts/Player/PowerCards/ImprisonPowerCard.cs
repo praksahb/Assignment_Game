@@ -1,7 +1,7 @@
 ﻿using TileGame.Player;
 using UnityEngine;
 
-namespace TileGame
+namespace TileGame.PowerCards
 {
     [CreateAssetMenu(fileName = "Imprison Power Card", menuName = "Power Cards/Imprison")]
     public class ImprisonPowerCard : PowerCardsBase, IPowersInterface

@@ -1,5 +1,5 @@
 using System;
-using TileGame.MainGame;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,7 +8,7 @@ namespace TileGame
 {
     public class UIManager : MonoBehaviour
     {
-        [SerializeField] private Button playTurn;
+        [SerializeField] private Button playTurnBtn;
         [SerializeField] private Button backwardsButton;
         [SerializeField] private Button imprisonButton;
         [SerializeField] private TextMeshProUGUI diceRollText;
@@ -27,7 +27,7 @@ namespace TileGame
 
         private void OnEnable()
         {
-            playTurn.onClick.AddListener(PlayTurnFunction);
+            playTurnBtn.onClick.AddListener(PlayTurnFunction);
             backwardsButton.onClick.AddListener(ActivateBackwardsPower);
             imprisonButton.onClick.AddListener(ActivateImprisonPower);
             gameManager.RolledDice += UpdateDiceRollValue;
@@ -40,13 +40,13 @@ namespace TileGame
 
         private void Start()
         {
-            playButtonText = playTurn.GetComponentInChildren<TextMeshProUGUI>();
+            playButtonText = playTurnBtn.GetComponentInChildren<TextMeshProUGUI>();
             //Debug.Log(playButtonText.text);
         }
 
         private void OnDisable()
         {
-            playTurn.onClick.RemoveAllListeners();
+            playTurnBtn.onClick.RemoveAllListeners();
             backwardsButton.onClick.RemoveAllListeners();
             imprisonButton.onClick.RemoveAllListeners();
             gameManager.RolledDice -= UpdateDiceRollValue;
@@ -59,8 +59,21 @@ namespace TileGame
 
         private void PlayTurnFunction()
         {
-            gameManager.PlayTurn();
+            SwitchPlayButton(false, false);
+            StartCoroutine(PlayTurnCoroutine());
+        }
+
+        private IEnumerator PlayTurnCoroutine()
+        {
+            yield return StartCoroutine(gameManager.PlayTurn());
             gameManager.ChangeTurnUI();
+            SwitchPlayButton(true, true);
+        }
+
+        private void SwitchPlayButton(bool isInteractable, bool isVisible)
+        {
+            playTurnBtn.interactable = isInteractable;
+            playTurnBtn.gameObject.SetActive(isVisible);
         }
 
         private void ActivateBackwardsPower()
