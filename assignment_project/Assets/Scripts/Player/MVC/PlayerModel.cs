@@ -111,12 +111,10 @@ namespace TileGame.Player
             {
                 activePower = value;
 
-                // sent action for imprisoned and none to change button displays
                 if (activePower == PowerCardType.Imprison)
                 {
-                    // perform ui actions to modify buttons
-                    // check once to see if actions does not effect for all player types
-                    // else pass normally by refs
+                    DisplayBackwardsPowerCardBtn = false;
+                    DisplayImprisonPowerCardBtn = false;
                 }
                 else // works for both backwards and forward
                 {
@@ -126,13 +124,101 @@ namespace TileGame.Player
             }
         }
 
+        // bool values used for UI changes in PlayerView
+        private bool displayDiceRollValue;
+        // changes from either Play Turn or Skip Turn
+        private bool changePlayTurnBtnText;
+        private bool displayBackwardsPowerCardBtn;
+        private bool displayImprisonPowerCardBtn;
+
+        // string values for status and power-active
+        // used for UI changes in PlayerView
+        private string statusName;
+        private string activePowerName;
+
+        // properties for the above private variables
+        public bool DisplayDiceRoll
+        {
+            get { return displayDiceRollValue; }
+            set
+            {
+                displayDiceRollValue = value;
+            }
+        }
+        public bool ChangePlayTurnBtnText
+        {
+            get { return changePlayTurnBtnText; }
+            set
+            {
+                changePlayTurnBtnText = value;
+            }
+        }
+
+        public bool DisplayBackwardsPowerCardBtn
+        {
+            get { return displayBackwardsPowerCardBtn; }
+            set
+            {
+                displayBackwardsPowerCardBtn = value;
+            }
+        }
+        public bool DisplayImprisonPowerCardBtn
+        {
+            get { return displayImprisonPowerCardBtn; }
+            set
+            {
+                displayImprisonPowerCardBtn = value;
+            }
+        }
+        public string StatusName
+        {
+            get { return statusName; }
+            set
+            {
+                statusName = value;
+            }
+        }
+        public string ActivePowerName
+        {
+            get { return activePowerName; }
+            set
+            {
+                activePowerName = value;
+            }
+        }
+
+        public void SetValuesStatusImprisoned(int turnsEffected)
+        {
+            CurrentStatus = Status.Imprisoned;
+            IsImprisoned = true;
+            TurnsEffected = turnsEffected;
+
+            // changes for UI effects
+            StatusName = "Imprisoned";
+            DisplayDiceRoll = false;
+            ChangePlayTurnBtnText = true;
+            DisplayBackwardsPowerCardBtn = true;
+            DisplayImprisonPowerCardBtn = true;
+        }
+
+        public void SetValuesStatusBackwards(int turnsEffected)
+        {
+            IsMovingBackwards = true;
+            CurrentStatus = Status.Backwards;
+            TurnsEffected = turnsEffected;
+
+            // UI
+            StatusName = "Moving Backwards";
+        }
+
+
         //constructor
         public PlayerModel(PlayerType playerType, int position)
         {
             PlayerType = playerType;
             // only works for 2 players
             PlayerName = PlayerType == PlayerType.Red ? "Red" : "Blue";
-
+            // 2 directions
             MoveDirection = PlayerType == PlayerType.Red ? PlayerMoveDirection.MoveRight : PlayerMoveDirection.MoveLeft;
 
             TilePosition = position;
