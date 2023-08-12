@@ -24,17 +24,14 @@ namespace TileGame.Player
 
         public int MovePlayer(int tileEndIndex)
         {
-            int moveDir = (int)PlayerModel.MoveDirection;
+            int moveDir = (int)PlayerModel.MoveDirection * PlayerModel.MoveBackwards;
+
+            PlayerModel.TilePosition += moveDir;
 
             if (PlayerModel.IsMovingBackwards)
             {
-                if (PlayerModel.TilePosition == 0 || PlayerModel.TilePosition == tileEndIndex)
-                {
-                    return PlayerModel.TilePosition;
-                }
+                return PlayerModel.TilePosition;
             }
-
-            PlayerModel.TilePosition += moveDir * PlayerModel.MoveBackwards;
 
             if (PlayerModel.TilePosition == 0 || PlayerModel.TilePosition == tileEndIndex)
             {
