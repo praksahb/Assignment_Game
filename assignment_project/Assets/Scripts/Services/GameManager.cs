@@ -114,14 +114,13 @@ namespace TileGame
 
             for (int i = 0; i < diceValue; i++)
             {
+                int tilePos = moveCommand.Execute();
+                currentTilePosition.x = tileListController.GetTilePositionX(tilePos);
+                currentPlayer.PlayerView.MoveCurrentPosition(currentTilePosition.x);
                 if (currentPlayer.PlayerModel.IsMovingBackwards && (currentPlayer.PlayerModel.TilePosition == 0 || currentPlayer.PlayerModel.TilePosition == totalTiles - 1))
                 {
                     break;
                 }
-                int tilePos = moveCommand.Execute();
-                currentTilePosition.x = tileListController.GetTilePositionX(tilePos);
-                currentPlayer.PlayerView.MoveCurrentPosition(currentTilePosition.x);
-
                 yield return new WaitForSeconds(0.5f);
             }
         }
