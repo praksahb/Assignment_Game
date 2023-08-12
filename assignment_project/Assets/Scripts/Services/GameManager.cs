@@ -1,8 +1,10 @@
+using System.Collections;
 using TileGame.Player;
+using TileGame.PowerCards;
 using TileGame.Tiles;
 using UnityEngine;
 
-namespace TileGame.MainGame
+namespace TileGame
 {
     // trying it without generic singleton for modularity
     public class GameManager : MonoBehaviour
@@ -15,8 +17,6 @@ namespace TileGame.MainGame
         [SerializeField] private int totalTiles = 10;
 
         [SerializeField] private UIManager uiManager;
-        [SerializeField] private BackwardsPowerCard backwardsPowerCard;
-        [SerializeField] private ImprisonPowerCard imprisonedPowerCard;
         [SerializeField] private PowerCardsList cardList;
 
         // game obj private references
@@ -31,8 +31,6 @@ namespace TileGame.MainGame
         private int playerBluePosition;
         private int turnIndex = 0;
         private PlayerController[] playersList;
-
-        //private PowerCardsBase[] activePowerCard;
 
         //Actions 
         public System.Action<int> RolledDice;
@@ -84,42 +82,6 @@ namespace TileGame.MainGame
             ChangeTurnUI();
         }
 
-        public void PlayTurn()
-        {
-            // get random dice roll value
-            int diceValue = Random.Range(1, 7);
-            // Invoke Action - received by UIManager
-            RolledDice?.Invoke(diceValue);
-
-            if (currentPlayer.PlayerModel.ActivePower != PowerCardType.None)
-            {
-                currentPlayer.PlayerModel.PowerDurationTurns--;
-            }
-
-            if (currentPlayer.PlayerModel.CurrentStatus != Status.Imprisoned)
-            {
-                // MOVE function
-                ICommand moveCommand = new MoveCommand(currentPlayer, totalTiles - 1);
-
-                for (int i = 0; i < diceValue; i++)
-                {
-                    if (currentPlayer.PlayerModel.IsMovingBackwards && (currentPlayer.PlayerModel.TilePosition == 0 || currentPlayer.PlayerModel.TilePosition == totalTiles - 1))
-                    {
-                        break;
-                    }
-                    int tilePos = moveCommand.Execute();
-                    currentTilePosition.x = tileListController.GetTilePositionX(tilePos);
-                    currentPlayer.PlayerView.MoveCurrentPosition(currentTilePosition.x);
-                }
-            }
-
-            turnIndex++;
-            if (currentPlayer.PlayerModel.CurrentStatus != Status.None)
-            {
-                currentPlayer.PlayerModel.TurnsEffected--;
-            }
-        }
-
         private IPowersInterface GetPowerCard(PowerCardType cardType)
         {
             for (int i = 0; i < cardList.powerCardsList.Length; i++)
@@ -144,6 +106,49 @@ namespace TileGame.MainGame
             PowersClient powerCardClient = new PowersClient(playersList, (turnIndex % numOfPlayers), powerCardStrategy);
 
             powerCardClient.Execute();
+        }
+
+        private IEnumerator PerformMoveCoroutine(int diceValue)
+        {
+            ICommand moveCommand = new MoveCommand(currentPlayer, totalTiles - 1);
+
+            for (int i = 0; i < diceValue; i++)
+            {
+                if (currentPlayer.PlayerModel.IsMovingBackwards && (currentPlayer.PlayerModel.TilePosition == 0 || currentPlayer.PlayerModel.TilePosition == totalTiles - 1))
+                {
+                    break;
+                }
+                int tilePos = moveCommand.Execute();
+                currentTilePosition.x = tileListController.GetTilePositionX(tilePos);
+                currentPlayer.PlayerView.MoveCurrentPosition(currentTilePosition.x);
+
+                yield return new WaitForSeconds(0.5f);
+            }
+        }
+
+        public IEnumerator PlayTurn()
+        {
+            // get random dice roll value
+            int diceValue = Random.Range(1, 7);
+            // Invoke Action - received by UIManager
+            RolledDice?.Invoke(diceValue);
+
+            if (currentPlayer.PlayerModel.ActivePower != PowerCardType.None)
+            {
+                currentPlayer.PlayerModel.PowerDurationTurns--;
+            }
+
+            if (currentPlayer.PlayerModel.CurrentStatus != Status.Imprisoned)
+            {
+                // MOVE function
+                yield return StartCoroutine(PerformMoveCoroutine(diceValue));
+            }
+
+            turnIndex++;
+            if (currentPlayer.PlayerModel.CurrentStatus != Status.None)
+            {
+                currentPlayer.PlayerModel.TurnsEffected--;
+            }
         }
 
         public void ChangeTurnUI()

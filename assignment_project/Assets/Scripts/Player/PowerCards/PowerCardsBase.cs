@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace TileGame
+namespace TileGame.PowerCards
 {
     public class PowerCardsBase : ScriptableObject
     {

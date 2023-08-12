@@ -1,6 +1,6 @@
 ﻿using TileGame.Player;
 
-namespace TileGame
+namespace TileGame.PowerCards
 {
     public class PowersClient
     {
