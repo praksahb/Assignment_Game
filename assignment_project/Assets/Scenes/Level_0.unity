@@ -1446,7 +1446,8 @@ MonoBehaviour:
   imprisonButton: {fileID: 795265416}
   diceRollText: {fileID: 1859525797}
   nameText: {fileID: 1939235721}
-  statusNameText: {fileID: 0}
+  statusNameText: {fileID: 1054132354}
+  powerNameText: {fileID: 1188345216}
   gameManager: {fileID: 1287285246}
 --- !u!1 &1272977529
 GameObject:
