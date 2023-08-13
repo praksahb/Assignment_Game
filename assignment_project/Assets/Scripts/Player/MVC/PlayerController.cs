@@ -12,13 +12,11 @@ namespace TileGame.Player
         public PlayerController(PlayerModel playerModel, PlayerView playerView, float tilePositionX, UIManager uiManager)
         {
             PlayerModel = playerModel;
+
             PlayerView = Object.Instantiate(playerView);
-
-            // create link btw playerController and playerView
             PlayerView.PlayerController = this;
-
-            // Move at tile position
             PlayerView.MoveCurrentPosition(tilePositionX);
+
             UiManager = uiManager;
         }
 

@@ -178,6 +178,10 @@ namespace TileGame.Player
             }
         }
 
+        // ACTION
+        // change active power immediately for current player
+        public System.Action ChangeActivePowerName;
+
         private void SetValuesStatusNone()
         {
             CurrentStatus = Status.None;
@@ -237,6 +241,7 @@ namespace TileGame.Player
 
             // UI
             activePowerName = "Imprison";
+            ChangeActivePowerName?.Invoke();
             DisplayBackwardsPowerCardBtn = false;
             DisplayImprisonPowerCardBtn = false;
         }
@@ -248,6 +253,7 @@ namespace TileGame.Player
 
             // UI 
             activePowerName = "Backwards";
+            ChangeActivePowerName?.Invoke();
         }
 
         //constructor

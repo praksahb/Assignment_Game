@@ -10,8 +10,9 @@ namespace TileGame.PowerCards
 
         public PowersClient(PlayerController[] playersList, int currentPlayerIdx, IPowersInterface currentPowerStrategy)
         {
-            effectedPlayers = new PlayerController[playersList.Length - 1];
+            powersInterface = currentPowerStrategy;
 
+            effectedPlayers = new PlayerController[playersList.Length - 1];
             int j = 0;
             for (int i = 0; i < playersList.Length; i++)
             {
@@ -24,14 +25,14 @@ namespace TileGame.PowerCards
                     effectingPlayer = playersList[i];
                 }
             }
-
-            powersInterface = currentPowerStrategy;
         }
 
         public void Execute()
         {
+            // player that is activating the power
             powersInterface.ActivatePowerCard(effectingPlayer);
 
+            // power that is effecting rest of players
             for (int i = 0; i < effectedPlayers.Length; i++)
             {
                 powersInterface.ApplyPowerEffects(effectedPlayers[i]);
