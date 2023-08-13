@@ -114,22 +114,21 @@ namespace TileGame
 
             for (int i = 0; i < diceValue; i++)
             {
-                int tilePos = moveCommand.Execute();
-                currentTilePosition.x = tileListController.GetTilePositionX(tilePos);
-                currentPlayer.PlayerView.MoveCurrentPosition(currentTilePosition.x);
                 if (currentPlayer.PlayerModel.IsMovingBackwards && (currentPlayer.PlayerModel.TilePosition == 0 || currentPlayer.PlayerModel.TilePosition == totalTiles - 1))
                 {
                     break;
                 }
+                int tilePos = moveCommand.Execute();
+                currentTilePosition.x = tileListController.GetTilePositionX(tilePos);
+                currentPlayer.PlayerView.MoveCurrentPosition(currentTilePosition.x);
+
                 yield return new WaitForSeconds(0.5f);
             }
         }
 
         public IEnumerator PlayTurn()
         {
-            // get random dice roll value
             int diceValue = Random.Range(1, 7);
-            // Invoke Action - received by UIManager
             RolledDice?.Invoke(diceValue);
 
             if (currentPlayer.PlayerModel.ActivePower != PowerCardType.None)
@@ -144,6 +143,7 @@ namespace TileGame
             }
 
             turnIndex++;
+
             if (currentPlayer.PlayerModel.CurrentStatus != Status.None)
             {
                 currentPlayer.PlayerModel.TurnsEffected--;

@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
@@ -20,11 +19,12 @@ namespace TileGame
 
         private TextMeshProUGUI playButtonText;
 
-        public Action<string, string, string> TurnChangeUpdates;
-        public Action<bool> DisplayDiceSwitch;
-        public Action<bool> UpdatePlayButtonText;
-        public Action<bool> SwitchOffBackwardsPowerCard;
-        public Action<bool> SwitchOffImprisonPowerCard;
+        public System.Action<string, string, string> TurnChangeUpdates;
+        public System.Action<string> ChangeActivePowerName;
+        public System.Action<bool> DisplayDiceSwitch;
+        public System.Action<bool> UpdatePlayButtonText;
+        public System.Action<bool> SwitchOffBackwardsPowerCard;
+        public System.Action<bool> SwitchOffImprisonPowerCard;
 
         private void OnEnable()
         {
@@ -37,6 +37,7 @@ namespace TileGame
             SwitchOffBackwardsPowerCard += SwitchButtonBackwards;
             SwitchOffImprisonPowerCard += SwitchImprisonButton;
             DisplayDiceSwitch += DisplayDiceSwitchFunction;
+            ChangeActivePowerName += ChangeAPName;
         }
 
         private void Start()
@@ -56,6 +57,7 @@ namespace TileGame
             SwitchOffBackwardsPowerCard -= SwitchButtonBackwards;
             SwitchOffImprisonPowerCard -= SwitchImprisonButton;
             DisplayDiceSwitch -= DisplayDiceSwitchFunction;
+            ChangeActivePowerName -= ChangeAPName;
         }
 
         private void PlayTurnFunction()
@@ -103,6 +105,13 @@ namespace TileGame
             statusNameText.SetText(text);
 
             text = "Active Power: ";
+            text += powerName;
+            powerNameText.SetText(text);
+        }
+
+        private void ChangeAPName(string powerName)
+        {
+            string text = "Active Power: ";
             text += powerName;
             powerNameText.SetText(text);
         }
