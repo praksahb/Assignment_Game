@@ -8,15 +8,15 @@ namespace TileGame.Player
 
         private void Start()
         {
-            PlayerController.PlayerModel.ChangeActivePowerName += PerformTxtValueChange;
+            PlayerController.PlayerModel.ChangeActivePowerName += PerformTextValueChange;
         }
 
         private void OnDisable()
         {
-            PlayerController.PlayerModel.ChangeActivePowerName -= PerformTxtValueChange;
+            PlayerController.PlayerModel.ChangeActivePowerName -= PerformTextValueChange;
         }
 
-        private void PerformTxtValueChange()
+        private void PerformTextValueChange()
         {
             PlayerController.UiManager.ChangeActivePowerName?.Invoke(PlayerController.PlayerModel.ActivePowerName);
         }

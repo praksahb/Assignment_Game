@@ -2,11 +2,20 @@ namespace TileGame.Player
 {
     public class PlayerModel
     {
+        // public read-only properties set once in constructor
         public PlayerType PlayerType { get; }
-
         public string PlayerName { get; }
 
         private PlayerMoveDirection moveDirection;
+        private int tilePosition;
+        private bool isMovingBackwards;
+        private int moveBackwards;
+        private bool isImprisoned;
+        private Status currentStatus;
+        private int turnsEffected;
+        private int powerDuration;
+        private PowerCardType activePower;
+
         public PlayerMoveDirection MoveDirection
         {
             get { return moveDirection; }
@@ -15,8 +24,6 @@ namespace TileGame.Player
                 moveDirection = value;
             }
         }
-
-        private int tilePosition;
         public int TilePosition
         {
             get { return tilePosition; }
@@ -26,7 +33,6 @@ namespace TileGame.Player
             }
         }
 
-        private bool isMovingBackwards;
         public bool IsMovingBackwards
         {
             get { return isMovingBackwards; }
@@ -43,7 +49,6 @@ namespace TileGame.Player
                 }
             }
         }
-        private int moveBackwards;
         public int MoveBackwards
         {
             get { return moveBackwards; }
@@ -52,8 +57,6 @@ namespace TileGame.Player
                 moveBackwards = value;
             }
         }
-
-        private bool isImprisoned;
         public bool IsImprisoned
         {
             get { return isImprisoned; }
@@ -62,8 +65,6 @@ namespace TileGame.Player
                 isImprisoned = value;
             }
         }
-
-        private Status currentStatus;
         public Status CurrentStatus
         {
             get { return currentStatus; }
@@ -72,8 +73,6 @@ namespace TileGame.Player
                 currentStatus = value;
             }
         }
-
-        private int turnsEffected;
         public int TurnsEffected
         {
             get { return turnsEffected; }
@@ -86,8 +85,6 @@ namespace TileGame.Player
                 }
             }
         }
-
-        private int powerDuration;
         public int PowerDurationTurns
         {
             get { return powerDuration; }
@@ -100,8 +97,6 @@ namespace TileGame.Player
                 }
             }
         }
-
-        private PowerCardType activePower;
         public PowerCardType ActivePower
         {
             get { return activePower; }
@@ -114,69 +109,14 @@ namespace TileGame.Player
                 }
             }
         }
-
         // bool values used for UI changes in PlayerView
-        private bool displayDiceRollValue;
-        // changes from either Play Turn or Skip Turn
-        private bool changePlayTurnBtnText;
-        private bool displayBackwardsPowerCardBtn;
-        private bool displayImprisonPowerCardBtn;
-
-        // string values for status and power-active
-        // used for UI changes in PlayerView
-        private string statusName;
-        private string activePowerName;
-
-        // properties for the above private variables
-        public bool DisplayDiceRoll
-        {
-            get { return displayDiceRollValue; }
-            set
-            {
-                displayDiceRollValue = value;
-            }
-        }
-        public bool ChangePlayTurnBtnText
-        {
-            get { return changePlayTurnBtnText; }
-            set
-            {
-                changePlayTurnBtnText = value;
-            }
-        }
-
-        public bool DisplayBackwardsPowerCardBtn
-        {
-            get { return displayBackwardsPowerCardBtn; }
-            set
-            {
-                displayBackwardsPowerCardBtn = value;
-            }
-        }
-        public bool DisplayImprisonPowerCardBtn
-        {
-            get { return displayImprisonPowerCardBtn; }
-            set
-            {
-                displayImprisonPowerCardBtn = value;
-            }
-        }
-        public string StatusName
-        {
-            get { return statusName; }
-            set
-            {
-                statusName = value;
-            }
-        }
-        public string ActivePowerName
-        {
-            get { return activePowerName; }
-            set
-            {
-                activePowerName = value;
-            }
-        }
+        // Public read - Private write Properties
+        public bool DisplayDiceRoll { get; private set; }
+        public bool ChangePlayTurnBtnText { get; set; }
+        public bool DisplayBackwardsPowerCardBtn { get; set; }
+        public bool DisplayImprisonPowerCardBtn { get; set; }
+        public string StatusName { get; set; }
+        public string ActivePowerName { get; set; }
 
         // ACTION
         // change active power immediately for current player
@@ -195,7 +135,6 @@ namespace TileGame.Player
             DisplayBackwardsPowerCardBtn = true;
             DisplayImprisonPowerCardBtn = true;
         }
-
         private void SetValActivePowerNone()
         {
             // UI
@@ -218,7 +157,6 @@ namespace TileGame.Player
             DisplayBackwardsPowerCardBtn = false;
             DisplayImprisonPowerCardBtn = false;
         }
-
         public void SetValuesStatusBackwards(int turnsEffected)
         {
             IsMovingBackwards = true;
@@ -232,7 +170,6 @@ namespace TileGame.Player
             DisplayBackwardsPowerCardBtn = true;
             DisplayImprisonPowerCardBtn = true;
         }
-
         // Setters for Player activating Power
         public void SetValActivePowerImprison(PowerCardType powerCardType, int turnsImpacted)
         {
@@ -240,23 +177,22 @@ namespace TileGame.Player
             PowerDurationTurns = turnsImpacted;
 
             // UI
-            activePowerName = "Imprison";
+            ActivePowerName = "Imprison";
             ChangeActivePowerName?.Invoke();
             DisplayBackwardsPowerCardBtn = false;
             DisplayImprisonPowerCardBtn = false;
         }
-
         public void SetValActivePowerBackwards(PowerCardType powerCardType, int turnsImpacted)
         {
             ActivePower = powerCardType;
             PowerDurationTurns = turnsImpacted;
 
             // UI 
-            activePowerName = "Backwards";
+            ActivePowerName = "Backwards";
             ChangeActivePowerName?.Invoke();
         }
 
-        //constructor
+        // constructor
         public PlayerModel(PlayerType playerType, int position)
         {
             PlayerType = playerType;
